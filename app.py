@@ -9,8 +9,7 @@ app_ui = ui.page_fluid(
         ui.tags.style("""
             body {
                 background: #f3f6fb;
-                color: #172b4d; 
-                
+                color: #172b4d;
                 font-family: Inter, "Segoe UI", Arial, sans-serif;
             }
 
@@ -380,7 +379,7 @@ def parse_xml(xml_bytes):
             elif kind == "BETWEEN":
                 start, end = text(dob, "FROM_YEAR"), text(dob, "TO_YEAR")
                 if start or end:
-                    dobs.append(f"{start}{end}")
+                    dobs.append(f"{start}-{end}")
 
         pobs = join_multi([
             ", ".join(filter(None, [
