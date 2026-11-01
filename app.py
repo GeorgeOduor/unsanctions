@@ -9,7 +9,8 @@ app_ui = ui.page_fluid(
         ui.tags.style("""
             body {
                 background: #f3f6fb;
-                color: #172b4d;
+                color: #172b4d; 
+                
                 font-family: Inter, "Segoe UI", Arial, sans-serif;
             }
 
@@ -247,7 +248,7 @@ app_ui = ui.page_fluid(
         ui.div(
             # LEFT: source and upload
             ui.div(
-                ui.h3("01  ·  XML Source"),
+                ui.h3("01  ï¿½  XML Source"),
                 ui.input_text(
                     "xml_url",
                     "UN XML source URL",
@@ -258,7 +259,7 @@ app_ui = ui.page_fluid(
 
                 ui.tags.hr(class_="section-divider"),
 
-                ui.h3("02  ·  Upload XML File"),
+                ui.h3("02  ï¿½  Upload XML File"),
                 ui.p(
                     "Select the XML file downloaded from the source URL.",
                     class_="upload-note",
@@ -533,7 +534,7 @@ def server(input, output, session):
                 return ui.p("Enter a valid HTTP or HTTPS URL.")
         
             return ui.tags.a(
-                "— Open XML source in a new tab",
+                "ï¿½ Open XML source in a new tab",
                 href=url,
                 target="_blank",
                 class_="source-link",
