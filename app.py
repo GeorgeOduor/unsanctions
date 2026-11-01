@@ -1,7 +1,19 @@
 from datetime import datetime
+import re
 from shiny import App, reactive, render, ui
 
 DEFAULT_URL = "https://scsanctions.un.org/xml/en/al-qaida"
+
+
+def clean_excel_text(value):
+    """Remove XML control characters that Excel cells cannot contain."""
+    if isinstance(value, str):
+        # Keep tab, newline and carriage return; remove other XML/Excel-illegal controls.
+        value = re.sub(r"[\\x00-\\x08\\x0B\\x0C\\x0E-\\x1F]", "", value)
+        return value
+    return value
+
+
 
 
 app_ui = ui.page_fluid(
@@ -379,7 +391,7 @@ def parse_xml(xml_bytes):
             elif kind == "BETWEEN":
                 start, end = text(dob, "FROM_YEAR"), text(dob, "TO_YEAR")
                 if start or end:
-                    dobs.append(f"{start}-{end}")
+                    dobs.append(f"{start}–{end}")
 
         pobs = join_multi([
             ", ".join(filter(None, [
@@ -491,7 +503,7 @@ def make_workbook(ind_rows, ent_rows):
             )
 
         for row in rows:
-            ws.append(row)
+            ws.append([clean_excel_text(value) for value in row])
 
         for row in ws.iter_rows(min_row=2):
             for cell in row:
@@ -528,17 +540,19 @@ def server(input, output, session):
     )
     @render.ui
     def source_link():
-            url = input.xml_url().strip()
-        
-            if not url.startswith(("https://", "http://")):
-                return ui.p("Enter a valid HTTP or HTTPS URL.")
-        
-            return ui.tags.a(
-                "� Open XML source in a new tab",
-                href=url,
-                target="_blank",
-                class_="source-link",
-            )
+        url = input.xml_url().strip()
+
+        if not url.startswith(("https://", "http://")):
+            return ui.p("Enter a valid HTTP or HTTPS URL.")
+
+        return ui.tags.a(
+            "↗ Open XML source in a new tab",
+            href=url,
+            target="_blank",
+            rel="noopener noreferrer",
+            class_="source-link",
+        )
+
     @reactive.effect
     @reactive.event(input.process)
     def process_file():
