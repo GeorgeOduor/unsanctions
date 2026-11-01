@@ -526,6 +526,7 @@ def server(input, output, session):
     status_message = reactive.Value(
         "1. Open the XML source. 2. Save the file. 3. Upload it here."
     )
+    @render.ui
     def source_link():
             url = input.xml_url().strip()
         
